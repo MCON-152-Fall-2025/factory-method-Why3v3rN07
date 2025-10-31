@@ -18,7 +18,7 @@ class RecipeFactoryTest {
         req.setServings(3);
 
         Recipe r = RecipeFactory.createFromRequest(req);
-        assertTrue(r instanceof BasicRecipe);
+        assertInstanceOf(BasicRecipe.class, r);
         assertNull(r.getId());
         assertEquals("Title", r.getTitle());
         assertEquals("Desc", r.getDescription());
@@ -30,27 +30,32 @@ class RecipeFactoryTest {
     @Test
     void createsSpecifiedSubtypes_caseInsensitive() {
         RecipeRequest req = new RecipeRequest();
-        req.setType("vegetarian");
+        req.setType("VEGETARIAN");
         Recipe r = RecipeFactory.createFromRequest(req);
-        assertTrue(r instanceof VegetarianRecipe);
+        assertInstanceOf(VegetarianRecipe.class, r);
 
         req.setType("DESSERT");
         r = RecipeFactory.createFromRequest(req);
-        assertTrue(r instanceof DessertRecipe);
+        assertInstanceOf(DessertRecipe.class, r);
 
         req.setType("DAIRY");
         r = RecipeFactory.createFromRequest(req);
-        assertTrue(r instanceof DairyRecipe);
+        assertInstanceOf(DairyRecipe.class, r);
+
+        req.setType("SOUP");
+        r = RecipeFactory.createFromRequest(req);
+        assertInstanceOf(SoupRecipe.class, r);
 
         req.setType("BASIC");
         r = RecipeFactory.createFromRequest(req);
-        assertTrue(r instanceof BasicRecipe);
+        assertInstanceOf(BasicRecipe.class, r);
+
     }
 
     @Test
     void nullRequest_returnsBasic_withNullFields() {
         Recipe r = RecipeFactory.createFromRequest(null);
-        assertTrue(r instanceof BasicRecipe);
+        assertInstanceOf(BasicRecipe.class, r);
         assertNull(r.getTitle());
         assertNull(r.getDescription());
         assertNull(r.getIngredients());
@@ -63,7 +68,7 @@ class RecipeFactoryTest {
         RecipeRequest req = new RecipeRequest();
         req.setType("UNKNOWN");
         Recipe r = RecipeFactory.createFromRequest(req);
-        assertTrue(r instanceof BasicRecipe);
+        assertInstanceOf(BasicRecipe.class, r);
     }
 }
 
