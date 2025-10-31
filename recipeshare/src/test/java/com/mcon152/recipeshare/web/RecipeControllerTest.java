@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -106,6 +107,31 @@ class RecipeControllerTest {
 
             // ensure nothing else on the service was called
             verifyNoMoreInteractions(recipeService);
+        }
+
+        @Test
+        void testAddSoupRecipe_thenAnswer_andCreated_andLocation() throws Exception {
+            ObjectNode json = mapper.createObjectNode();
+            json.put("type", "SOUP");
+            json.put("title", "Mochi Soup");
+            json.put("description", "For New Years'");
+            json.put("ingredients", "Bone broth, daikon, gobo, lotus, carrot, mochi");
+            json.put("instructions", "Boil vegetables in broth. Add mochi just before serving.");
+            json.put("servings", 20);
+            json.put("spiceLevel", "Mild");
+            String jsonString = mapper.writeValueAsString(json);
+
+            // thenAnswer: assign ID dynamically based on the request body
+            when(recipeService.addRecipe(any(SoupRecipe.class))).thenAnswer(invocation -> {
+                SoupRecipe r = invocation.getArgument(0);
+                return new SoupRecipe(1L, r.getTitle(), r.getDescription(), r.getIngredients(), r.getInstructions(), r.getServings(), r.getSpiceLevel());
+            });
+
+            mockMvc.perform(post("/api/recipes")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(jsonString))
+                            .andExpect(status().isCreated())
+                            .andExpect(header().exists("Location"));
         }
 
         @ParameterizedTest

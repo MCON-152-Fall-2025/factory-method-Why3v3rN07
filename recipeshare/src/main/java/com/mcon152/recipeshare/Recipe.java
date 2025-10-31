@@ -2,6 +2,8 @@ package com.mcon152.recipeshare;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "recipes")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
