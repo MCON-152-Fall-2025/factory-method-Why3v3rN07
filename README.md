@@ -129,3 +129,9 @@ For questions or feedback, please open an issue on GitHub.
 
 - [Spring Boot Documentation](https://spring.io/projects/spring-boot)
 - [Apache Maven Documentation](https://maven.apache.org/guides/index.html)
+
+//Instructions for using maven 
+Run the application with maven: mvn spring-boot:run
+Access locally with SSH port forwarding: ssh -L 8082:localhost:8081 -p 5005 student@<your-vm-hostname>
+Browse to http://localhost:8082
+
